@@ -117,6 +117,11 @@ public:
     Pa_Terminate();
   }
 
+  void abort() {
+    Pa_AbortStream(mStream);
+    Pa_Terminate();
+  }
+
   void addChunk(std::shared_ptr<AudioChunk> audioChunk) {
     mChunkQueue.enqueue(audioChunk);
   }
@@ -286,6 +291,12 @@ NAN_METHOD(AudioOut::Start) {
   info.GetReturnValue().SetUndefined();
 }
 
+NAN_METHOD(AudioOut::Abort) {
+  AudioOut* obj = Nan::ObjectWrap::Unwrap<AudioOut>(info.Holder());
+  obj->mOutContext->abort();
+  info.GetReturnValue().SetUndefined();
+}
+
 NAN_METHOD(AudioOut::Write) {
   if (info.Length() != 2)
     return Nan::ThrowError("AudioOut Write expects 2 arguments");
@@ -323,6 +334,7 @@ NAN_MODULE_INIT(AudioOut::Init) {
   SetPrototypeMethod(tpl, "start", Start);
   SetPrototypeMethod(tpl, "write", Write);
   SetPrototypeMethod(tpl, "quit", Quit);
+  SetPrototypeMethod(tpl, "abort", Abort);
 
   constructor().Reset(Nan::GetFunction(tpl).ToLocalChecked());
   Nan::Set(target, Nan::New("AudioOut").ToLocalChecked(),

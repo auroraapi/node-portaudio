@@ -55,6 +55,10 @@ function AudioInput(options) {
         quitCb();
     });
   }
+  this.abort = () => {
+    Active = false;
+    this.AudioInAdon.abort()
+  };
 }
 util.inherits(AudioInput, Readable);
 exports.AudioInput = AudioInput;
@@ -81,6 +85,10 @@ function AudioOutput(options) {
         quitCb();
     });
   }
+  this.abort = () => {
+    Active = false;
+    this.AudioOutAdon.abort()
+  };
   this.on('finish', () => { if (Active) this.quit(); });
 }
 util.inherits(AudioOutput, Writable);

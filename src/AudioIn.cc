@@ -109,6 +109,11 @@ public:
     Pa_Terminate();
   }
 
+  void abort() {
+    Pa_AbortStream(mStream);
+    Pa_Terminate();
+  }
+
   std::shared_ptr<Memory> readChunk() {
     return mChunkQueue.dequeue();
   }
@@ -236,6 +241,12 @@ NAN_METHOD(AudioIn::Start) {
   info.GetReturnValue().SetUndefined();
 }
 
+NAN_METHOD(AudioIn::Abort) {
+  AudioIn* obj = Nan::ObjectWrap::Unwrap<AudioIn>(info.Holder());
+  obj->mInContext->abort();
+  info.GetReturnValue().SetUndefined();
+}
+
 NAN_METHOD(AudioIn::Read) {
   if (info.Length() != 2)
     return Nan::ThrowError("AudioIn Read expects 2 arguments");
@@ -273,6 +284,7 @@ NAN_MODULE_INIT(AudioIn::Init) {
   SetPrototypeMethod(tpl, "start", Start);
   SetPrototypeMethod(tpl, "read", Read);
   SetPrototypeMethod(tpl, "quit", Quit);
+  SetPrototypeMethod(tpl, "abort", Abort);
 
   constructor().Reset(Nan::GetFunction(tpl).ToLocalChecked());
   Nan::Set(target, Nan::New("AudioIn").ToLocalChecked(),

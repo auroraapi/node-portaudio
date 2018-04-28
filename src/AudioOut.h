@@ -57,6 +57,7 @@ private:
   static NAN_METHOD(Start);
   static NAN_METHOD(Write);
   static NAN_METHOD(Quit);
+  static NAN_METHOD(Abort);
 
   std::shared_ptr<OutContext> mOutContext;
 };
