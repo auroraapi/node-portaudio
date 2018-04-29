@@ -30,8 +30,9 @@
   "scripts": {
     "prepublish": "yarn build",
     "install": "node-gyp rebuild",
-    "build": "rm -rf index.js && tsc --pretty --declaration",
-    "lint": "tslint -c tslint.json -p tsconfig.json -e node_modules --fix"
+    "build": "rm -rf index.js index.d.ts && tsc --pretty --declaration",
+    "lint": "tslint -c tslint.json -p tsconfig.json -e node_modules --fix",
+    "clean": "rm -rf index.js index.d.ts build yarn-error.log"
   },
   "gypfile": true
 }
