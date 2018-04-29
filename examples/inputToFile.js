@@ -6,7 +6,7 @@ var ai = new portAudio.AudioInput({
   channelCount: 2,
   sampleFormat: portAudio.SampleFormat16Bit,
   sampleRate: 44100,
-  deviceId: 3
+  deviceId: -1
 });
 ai.on('error', console.error);
 
@@ -17,4 +17,4 @@ var ws = fs.createWriteStream('rawAudio.raw');
 ai.pipe(ws);
 ai.start();
 
-process.once('SIGINT', ai.quit);
+process.once('SIGINT', () => ai.quit());

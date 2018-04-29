@@ -1,5 +1,7 @@
-/.idea
-/build
-/node_modules
-test.wav
-rawAudio.raw
+.idea
+build
+index.js
+index.d.ts
+node_modules
+*.wav
+*.raw

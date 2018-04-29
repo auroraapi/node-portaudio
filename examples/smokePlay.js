@@ -27,17 +27,13 @@ var ao = new portAudio.AudioOutput({
   channelCount: 2,
   sampleFormat: portAudio.SampleFormat16Bit,
   sampleRate: sampleRate,
-  deviceId: -1 });
-
-console.log('ao', ao);
-
-ao.on('error', console.error);
-
-// rs.on('end', ao.end);
+  deviceId: -1
+});
 
 rs.pipe(ao);
 
+ao.on('error', console.error);
 ao.once('finish', () => { console.log("Finish called."); });
 ao.start();
 
-process.on('SIGINT', ao.quit);
+process.on('SIGINT', () => ao.quit());

@@ -37,6 +37,7 @@ function tenSecondsIsh(writer, data, callback) {
   write();
   function write() {
     var ok = true;
+    console.log(i);
     do {
       i -= 1;
       if (i === 0) {
@@ -46,13 +47,14 @@ function tenSecondsIsh(writer, data, callback) {
         // see if we should continue, or wait
         // don't pass the callback, because we're not done yet.
         ok = writer.write(data);
+        console.log(ok);
         // console.log('Writing data', ok);
       }
     } while (i > 0 && ok);
     if (i > 0) {
       // had to stop early!
       // write some more once it drains
-      // console.log("So draining.");
+      console.log("So draining.");
       writer.once('drain', write);
     }
   }
@@ -62,5 +64,7 @@ ao.on('error', console.error);
 
 tenSecondsIsh(ao, buffer, console.log.bind(null, "Done!"));
 ao.start();
+
+setTimeout(() => ao.abort(), 1000);
 
 process.once('SIGINT', ao.quit);

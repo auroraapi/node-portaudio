@@ -1,9 +1,9 @@
 {
   "targets": [
     {
-      "target_name": "naudiodon",
+      "target_name": "node_pa",
       "sources": [
-        "src/naudiodon.cc",
+        "src/node_pa.cc",
         "src/GetDevices.cc",
       	"src/AudioIn.cc",
       	"src/AudioOut.cc"
