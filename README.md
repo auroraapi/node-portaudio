@@ -2,7 +2,7 @@
 
 A [Node.js](http://nodejs.org/) [addon](http://nodejs.org/api/addons.html) that provides a wrapper around the [PortAudio](http://portaudio.com/) library, enabling an application to record and play audio with cross platform support. With this library, you can create [node.js streams](https://nodejs.org/dist/latest-v6.x/docs/api/stream.html) that can be piped to or from other streams, such as files and network connections. This library supports back-pressure.
 
-This is a fork of [node-portaudio](/Streampunk/node-portaudio), refactored by:
+This is a fork of [naudiodon](/Streampunk/naudiodon), refactored by:
 
 * porting the entire codebase to TypeScript
 * adding better documentation
@@ -41,7 +41,7 @@ import * as portAudio from 'node-portaudio';
 To get list of supported devices, call the `getDevices()` function.
 
 ```javascript
-var portAudio = require('node-portaudio');
+const portAudio = require('node-portaudio');
 
 console.log(portAudio.getDevices());
 ```
@@ -92,7 +92,7 @@ const fs = require('fs');
 const portAudio = require('node-portaudio');
 
 // Create an instance of AudioOutput, which is a WriteableStream
-var ao = new portAudio.AudioOutput({
+const ao = new portAudio.AudioOutput({
   channelCount: 2,
   sampleFormat: portAudio.SampleFormat16Bit,
   sampleRate: 48000,
@@ -104,7 +104,7 @@ ao.on('error', err => console.error);
 
 // Create a stream to pipe into the AudioOutput
 // Note that this does not strip the WAV header so a click will be heard at the beginning
-var rs = fs.createReadStream('steam_48000.wav');
+const rs = fs.createReadStream('steam_48000.wav');
 
 // setup to close the output stream at the end of the read stream
 rs.on('end', () => ao.end());
@@ -119,11 +119,11 @@ ao.start();
 Recording audio invovles reading from an instance of `AudioInput`.
 
 ```javascript
-var fs = require('fs');
-var portAudio = require('node-portaudio');
+const fs = require('fs');
+const portAudio = require('node-portaudio');
 
 // Create an instance of AudioInput, which is a ReadableStream
-var ai = new portAudio.AudioInput({
+const ai = new portAudio.AudioInput({
   channelCount: 2,
   sampleFormat: portAudio.SampleFormat16Bit,
   sampleRate: 44100
@@ -134,7 +134,7 @@ var ai = new portAudio.AudioInput({
 ai.on('error', err => console.error);
 
 // Create a write stream to write out to a raw audio file
-var ws = fs.createWriteStream('rawAudio.raw');
+const ws = fs.createWriteStream('rawAudio.raw');
 
 //Start streaming
 ai.pipe(ws);
