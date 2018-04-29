@@ -28,6 +28,7 @@
   "author": "Aurora API",
   "license": "MIT",
   "scripts": {
+    "prepublish": "yarn build",
     "install": "node-gyp rebuild",
     "build": "rm -rf index.js && tsc --pretty --declaration",
     "lint": "tslint -c tslint.json -p tsconfig.json -e node_modules --fix"
