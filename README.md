@@ -1,16 +1,14 @@
-# Naudiodon
+# node-portaudio
 
 A [Node.js](http://nodejs.org/) [addon](http://nodejs.org/api/addons.html) that provides a wrapper around the [PortAudio](http://portaudio.com/) library, enabling an application to record and play audio with cross platform support. With this library, you can create [node.js streams](https://nodejs.org/dist/latest-v6.x/docs/api/stream.html) that can be piped to or from other streams, such as files and network connections. This library supports back-pressure.
 
-This is a fork of [node-portaudio](/joeferner/node-portaudio), refactored by:
+This is a fork of [node-portaudio](/Streampunk/node-portaudio), refactored by:
 
-* changing from an event model to a stream model;
-* linking to the v8 libraries through the [Native Abstractions for Node.js (NAN)](/nodejs/nan) library to enable more portability between node versions.
-* adding in local copies of libraries so that portaudio does not have to be installed preemptively.
+* porting the entire codebase to TypeScript
+* adding better documentation
+* adding some more functionality
 
-Little of the original remains but I am very grateful for Joe Ferner for the inspiration and framework to get started.
-
-This library has been tested on MacOS X 10.11, Windows 10, Linux Ubuntu Trusty and Raspbian Jessie (`armhf` architecture).
+See forked repository for credits for corresponding contributions.
 
 Note: This is a server side library. It is not intended as a means to play and record audio via a browser.
 
@@ -18,20 +16,32 @@ Note: This is a server side library. It is not intended as a means to play and r
 
 Install [Node.js](http://nodejs.org/) for your platform. This software has been developed against the long term stable (LTS) release. For ease of installation with other node packages, this package includes a copy of the dependent PortAudio library and so has no prerequisites.
 
-Naudiodon is designed to be `require`d to use from your own application to provide async processing. For example:
+`node-portaudio` is designed to be `require`d or `import`ed to use from your own application to provide async processing. For example:
 
-    npm install --save naudiodon
+    npm install --save node-portaudio
 
 For Raspberry Pi users, please note that this library is not intended for use with the internal sound card. Please use an external USB sound card or GPIO breakout board such as the [_Pi-DAC+ Full-HD Audio Card_](https://www.modmypi.com/raspberry-pi/breakout-boards/iqaudio/pi-dac-plus-full-hd-audio-card/?tag=pi-dac).
 
-## Using naudiodon
+## Using node-portaudio
+
+If you are using regular Node.js, include the library with:
+
+```javascript
+const portAudio = require('node-portaudio');
+```
+
+If you are using TypeScript, definitions have been provided and you can import the library with:
+
+```typescript
+import * as portAudio from 'node-portaudio';
+```
 
 ### Listing devices
 
 To get list of supported devices, call the `getDevices()` function.
 
 ```javascript
-var portAudio = require('naudiodon');
+var portAudio = require('node-portaudio');
 
 console.log(portAudio.getDevices());
 ```
@@ -79,7 +89,7 @@ Playing audio involves streaming audio data to an instance of `AudioOutput`.
 
 ```javascript
 const fs = require('fs');
-const portAudio = require('naudiodon');
+const portAudio = require('node-portaudio');
 
 // Create an instance of AudioOutput, which is a WriteableStream
 var ao = new portAudio.AudioOutput({
@@ -110,7 +120,7 @@ Recording audio invovles reading from an instance of `AudioInput`.
 
 ```javascript
 var fs = require('fs');
-var portAudio = require('../index.js');
+var portAudio = require('node-portaudio');
 
 // Create an instance of AudioInput, which is a ReadableStream
 var ai = new portAudio.AudioInput({
@@ -159,18 +169,12 @@ for hosting Audio Units. Support for this will be removed in a future release. A
 incompatible with version 3 audio units. Please transition to the API's in AudioComponent.h.
 ```
 
-A locally compiled version of the portaudio library is now included with the latest version of naudiodon that uses more up-to-date APIs from Apple. The portaudio team are [aware of this issue](https://app.assembla.com/spaces/portaudio/tickets/218-pa-coreaudio-uses-some--quot-deprecated-quot--apis----this-is-by-design-but-need/details).
+A locally compiled version of the portaudio library is now included with the latest version of `node-portaudio` that uses more up-to-date APIs from Apple. The portaudio team are [aware of this issue](https://app.assembla.com/spaces/portaudio/tickets/218-pa-coreaudio-uses-some--quot-deprecated-quot--apis----this-is-by-design-but-need/details).
 
 ## Status, support and further development
 
-Optimisation is still required for use with lower specification devices, such as Raspberry Pis.
-
-Although the architecture of naudiodon is such that it could be used at scale in production environments, development is not yet complete. In its current state, it is recommended that this software is used in development environments and for building prototypes. Future development will make this more appropriate for production use.
-
-Contributions can be made via pull requests and will be considered by the author on their merits. Enhancement requests and bug reports should be raised as github issues. For support, please contact [Streampunk Media](http://www.streampunk.media/).
+This library was created mostly to port to TypeScript and add some additional PortAudio functionality. It may be developed further if more features are requested. Additionally, you can create a PR to add some of your own functionality.
 
 ## License
 
-This software is released under the Apache 2.0 license. Copyright 2017 Streampunk Media Ltd.
-
-This software uses libraries from the PortAudio project. The [license terms for PortAudio](http://portaudio.com/license.html) are stated to be an [MIT license](http://opensource.org/licenses/mit-license.php). Streampunk Media are grateful to Ross Bencina and Phil Burk for their excellent library.
+This software uses libraries from the PortAudio project. The [license terms for PortAudio](http://portaudio.com/license.html) are stated to be an [MIT license](http://opensource.org/licenses/mit-license.php).
