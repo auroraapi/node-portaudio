@@ -54,7 +54,6 @@ function tenSecondsIsh(writer, data, callback) {
     if (i > 0) {
       // had to stop early!
       // write some more once it drains
-      console.log("So draining.");
       writer.once('drain', write);
     }
   }
@@ -65,6 +64,4 @@ ao.on('error', console.error);
 tenSecondsIsh(ao, buffer, console.log.bind(null, "Done!"));
 ao.start();
 
-setTimeout(() => ao.abort(), 1000);
-
-process.once('SIGINT', ao.quit);
+process.once('SIGINT', () => ao.quit());

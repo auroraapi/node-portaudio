@@ -3,5 +3,6 @@ build
 index.js
 index.d.ts
 node_modules
+yarn-error.log
 *.wav
 *.raw

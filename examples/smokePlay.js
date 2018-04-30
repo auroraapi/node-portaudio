@@ -17,23 +17,20 @@
 
 var portAudio = require('../index.js');
 var fs = require('fs');
-var rs = fs.createReadStream('test.wav');
-
-var sampleRate = 48000;
+var file = fs.readFileSync('test.wav');
 
 console.log(portAudio.getDevices());
 
 var ao = new portAudio.AudioOutput({
-  channelCount: 2,
+  channelCount: 1,
   sampleFormat: portAudio.SampleFormat16Bit,
-  sampleRate: sampleRate,
+  sampleRate: 44100,
   deviceId: -1
 });
 
-rs.pipe(ao);
-
 ao.on('error', console.error);
-ao.once('finish', () => { console.log("Finish called."); });
 ao.start();
+ao.write(file);
+ao.end();
 
 process.on('SIGINT', () => ao.quit());
