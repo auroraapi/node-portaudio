@@ -5,8 +5,9 @@
       "sources": [
         "src/node_pa.cc",
         "src/GetDevices.cc",
-      	"src/AudioIn.cc",
-      	"src/AudioOut.cc"
+        "src/AudioIn.cc",
+        "src/AudioOut.cc",
+        "src/common.cc"
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")", "portaudio/include"

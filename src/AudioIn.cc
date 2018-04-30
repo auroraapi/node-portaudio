@@ -14,6 +14,7 @@
 */
 
 #include <nan.h>
+#include "common.h"
 #include "AudioIn.h"
 #include "Persist.h"
 #include "Params.h"
@@ -27,6 +28,8 @@ using namespace v8;
 
 namespace streampunk {
 
+extern bool DEBUG;
+
 static std::map<char*, std::shared_ptr<Memory> > outstandingAllocs;
 static void freeAllocCb(char* data, void* hint) {
   std::map<char*, std::shared_ptr<Memory> >::iterator it = outstandingAllocs.find(data);
@@ -39,13 +42,16 @@ public:
   InContext(std::shared_ptr<AudioOptions> audioOptions, PaStreamCallback *cb)
     : mActive(true), mAudioOptions(audioOptions), mChunkQueue(mAudioOptions->maxQueue()) {
 
+    // Set DEBUG flag based on audio options
+    DEBUG = audioOptions->debugMode();
+
     PaError errCode = Pa_Initialize();
     if (errCode != paNoError) {
       std::string err = std::string("Could not initialize PortAudio: ") + Pa_GetErrorText(errCode);
       Nan::ThrowError(err.c_str());
     }
 
-    printf("Input %s\n", mAudioOptions->toString().c_str());
+    DEBUG_PRINT_ERR("Input %s\n", mAudioOptions->toString().c_str());
 
     PaStreamParameters inParams;
     memset(&inParams, 0, sizeof(PaStreamParameters));
@@ -57,7 +63,7 @@ public:
       inParams.device = Pa_GetDefaultInputDevice();
     if (inParams.device == paNoDevice)
       Nan::ThrowError("No default input device");
-    printf("Input device name is %s\n", Pa_GetDeviceInfo(inParams.device)->name);
+    DEBUG_PRINT_ERR("Input device name is %s\n", Pa_GetDeviceInfo(inParams.device)->name);
 
     inParams.channelCount = mAudioOptions->channelCount();
     if (inParams.channelCount > Pa_GetDeviceInfo(inParams.device)->maxInputChannels)

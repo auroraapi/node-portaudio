@@ -14,6 +14,7 @@
 */
 
 #include <nan.h>
+#include "common.h"
 #include "AudioOut.h"
 #include "Persist.h"
 #include "Params.h"
@@ -25,6 +26,8 @@
 using namespace v8;
 
 namespace streampunk {
+
+extern bool DEBUG;
 
 class AudioChunk {
 public:
@@ -47,13 +50,16 @@ public:
     : mAudioOptions(audioOptions), mChunkQueue(mAudioOptions->maxQueue()), 
       mCurOffset(0), mActive(true), mFinished(false) {
 
+    // set DEBUG flag based on options
+    DEBUG = audioOptions->debugMode();
+
     PaError errCode = Pa_Initialize();
     if (errCode != paNoError) {
       std::string err = std::string("Could not initialize PortAudio: ") + Pa_GetErrorText(errCode);
       Nan::ThrowError(err.c_str());
     }
 
-    printf("Output %s\n", mAudioOptions->toString().c_str());
+    DEBUG_PRINT_ERR("Output %s\n", mAudioOptions->toString().c_str());
 
     PaStreamParameters outParams;
     memset(&outParams, 0, sizeof(PaStreamParameters));
@@ -65,7 +71,7 @@ public:
       outParams.device = Pa_GetDefaultOutputDevice();
     if (outParams.device == paNoDevice)
       Nan::ThrowError("No default output device");
-    printf("Output device name is %s\n", Pa_GetDeviceInfo(outParams.device)->name);
+    DEBUG_PRINT_ERR("Output device name is %s\n", Pa_GetDeviceInfo(outParams.device)->name);
 
     outParams.channelCount = mAudioOptions->channelCount();
     if (outParams.channelCount > Pa_GetDeviceInfo(outParams.device)->maxOutputChannels)
@@ -137,7 +143,7 @@ public:
         uint32_t bytesCopied = doCopy(mCurChunk->chunk(), dst, bytesRemaining);
         uint32_t missingBytes = bytesRemaining - bytesCopied;
         if (missingBytes > 0) {
-          printf("Finishing - %d bytes not available for the last output buffer\n", missingBytes);
+          DEBUG_PRINT_ERR("Finishing - %d bytes not available for the last output buffer\n", missingBytes);
           memset(dst + bytesCopied, 0, missingBytes);
         }
       }

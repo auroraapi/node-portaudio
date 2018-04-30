@@ -42,6 +42,11 @@ export interface AudioOptions {
    * The sample width. Use one of the exported constants (8, 16, 24, or 32)
    */
   sampleFormat?: number;
+  /**
+   * Enable debug mode. This will print out messages from the C bindings onto
+   * stderr when an error occurs
+   */
+  debug?: boolean;
 }
 
 /**
