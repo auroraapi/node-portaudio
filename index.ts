@@ -53,7 +53,7 @@ export interface AudioOptions {
  * The function signature of the callbacks to various `AudioInput` and
  * `AudioOutput` methods.
  */
-export type AudioCallback = () => void;
+export type AudioCallback = (error?: Error | null | undefined) => void;
 
 /**
  * AudioInput is a readable stream that records audio from the given device
