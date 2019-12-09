@@ -2,7 +2,7 @@
 
 A [Node.js](http://nodejs.org/) [addon](http://nodejs.org/api/addons.html) that provides a wrapper around the [PortAudio](http://portaudio.com/) library, enabling an application to record and play audio with cross platform support. With this library, you can create [node.js streams](https://nodejs.org/dist/latest-v6.x/docs/api/stream.html) that can be piped to or from other streams, such as files and network connections. This library supports back-pressure.
 
-This is a fork of [naudiodon](/Streampunk/naudiodon), refactored by:
+This is a fork of [naudiodon](https://github.com/Streampunk/naudiodon), refactored by:
 
 * porting the entire codebase to TypeScript
 * adding better documentation
